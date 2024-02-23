@@ -3,8 +3,14 @@
     display: flex;
     align-items: center;
     
-    .delete {
-        display: flex;
-        gap: 4px;    
+    .meta {
+        display: none;
+    }
+
+    &:hover {
+        .meta {
+            display: flex;
+            gap: 4px;
+        }
     }
 }
