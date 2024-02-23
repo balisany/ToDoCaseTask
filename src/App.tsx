@@ -1,18 +1,27 @@
 import { useEffect, useState } from "react";
-import ToDoMockData from "./data";
+// import ToDoMockData from "./data";
 import TodoItem from "./types";
 import TodoList from "./components/TodoList";
 import TodoForm from "./components/TodoForm";
 import EditForm from "./components/EditForm";
 
 function App() {
-  const initialMockData = ToDoMockData;
-  const [todos, setTodos] = useState<TodoItem[]>(initialMockData);
+  // const initialMockData = ToDoMockData;
+  // const [todos, setTodos] = useState<TodoItem[]>(initialMockData);
+
+  const [todos, setTodos] = useState<TodoItem[]>(() => {
+    const storedData = localStorage.getItem("TODOS");
+    if (storedData === null) return [];
+
+    return JSON.parse(storedData);
+  });
+
   const [filteredToDos, setFilteredToDos] = useState<TodoItem[]>(todos);
   const [isDisabled, setIsDisabled] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState("");
 
   useEffect(() => {
+    localStorage.setItem("TODOS", JSON.stringify(todos));
     setFilteredToDos(todos);
   }, [todos]);
 
