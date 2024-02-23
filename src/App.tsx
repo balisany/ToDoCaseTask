@@ -1,7 +1,8 @@
 import { useState } from "react";
-import TodoItem from "./types";
-import ToDoMockData from "./data";
+import TodoList from "./components/TodoList";
 import TodoForm from "./components/TodoForm";
+import ToDoMockData from "./data";
+import TodoItem from "./types";
 
 function App() {
   const initialMockData = ToDoMockData;
@@ -21,18 +22,31 @@ function App() {
     });
   };
 
+  const onToggle = (id: string, status: boolean) => {
+    setTodos((currentTodo) => {
+      return currentTodo.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, completed: status };
+        }
+        return todo;
+      });
+    });
+  };
+
+  const onDelete = (id: string) => {};
+
+  const onEdit = (id: string) => {};
+
   return (
     <div className="container">
       <div className="bg-white rounded shadow p-6 m-4 sm:w-full md:w-3/4 lg:w-3/4 lg:max-w-lg">
         <TodoForm onSubmit={onSubmit} />
-
-        <ul className="p-4 list">
-          {todos.map((todo) => (
-            <li className="p-2 list-item" key={todo.id}>
-              {todo.title}
-            </li>
-          ))}
-        </ul>
+        <TodoList
+          data={todos}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onToggle={onToggle}
+        />
       </div>
     </div>
   );
