@@ -1,8 +1,12 @@
-FROM node:16.18.0
+FROM node:16.18.0 AS build-node
 WORKDIR /ToDoCaseTask
-ENV PATH /ToDoCaseTask/node_modules/.bin:$PATH
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install --silent
-COPY . ./
-CMD ["npm", "start"]
+
+COPY package.json .
+COPY package-lock.json .
+RUN npm install
+COPY . .
+
+EXPOSE 5173
+
+# Start your React app
+CMD ["npm", "run", "dev"]
