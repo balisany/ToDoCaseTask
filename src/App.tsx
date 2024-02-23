@@ -33,7 +33,11 @@ function App() {
     });
   };
 
-  const onDelete = (id: string) => {};
+  const onDelete = (id: string) => {
+    setTodos((currentValues) => {
+      return currentValues.filter((todo) => todo.id !== id);
+    });
+  };
 
   const onEdit = (id: string) => {};
 
