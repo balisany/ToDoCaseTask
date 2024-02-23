@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import TodoList from "./components/TodoList";
-import TodoForm from "./components/TodoForm";
 import ToDoMockData from "./data";
 import TodoItem from "./types";
+import TodoList from "./components/TodoList";
+import TodoForm from "./components/TodoForm";
+import EditForm from "./components/EditForm";
 
 function App() {
   const initialMockData = ToDoMockData;
   const [todos, setTodos] = useState<TodoItem[]>(initialMockData);
   const [filteredToDos, setFilteredToDos] = useState<TodoItem[]>(todos);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState("");
 
   useEffect(() => {
     setFilteredToDos(todos);
@@ -27,6 +30,18 @@ function App() {
     });
   };
 
+  const onUpdate = (id: string, title: string) => {
+    setTodos((currentTodos) => {
+      return currentTodos.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, title: title };
+        }
+        return todo;
+      });
+    });
+    setSelectedItemId("");
+  };
+
   const onToggle = (id: string, status: boolean) => {
     setTodos((currentTodo) => {
       return currentTodo.map((todo) => {
@@ -44,7 +59,9 @@ function App() {
     });
   };
 
-  const onEdit = (id: string) => {};
+  const onEdit = (id: string) => {
+    setSelectedItemId(id);
+  };
 
   const countFilteredTasks = (type: "ALL" | "ACTIVE" | "COMPLETED"): number => {
     const filteredByType =
@@ -65,6 +82,7 @@ function App() {
             type === "COMPLETED" ? todo.completed : !todo.completed
           );
 
+    setIsDisabled(type === "COMPLETED");
     setFilteredToDos(filtered);
   };
 
@@ -78,6 +96,7 @@ function App() {
 
   return (
     <div className="container">
+      {/* <Header data={todos} /> */}
       <div className="p-1 m-4  flex text-center content-center items-center gap-6">
         <button
           type="button"
@@ -104,9 +123,18 @@ function App() {
           <CounterLabel count={countFilteredTasks("COMPLETED")} />
         </button>
       </div>
-
       <div className="bg-white rounded shadow p-6 m-4 sm:w-full md:w-3/4 lg:w-3/4 lg:max-w-lg">
-        <TodoForm onSubmit={onSubmit} />
+        {isDisabled && <h1 className="">Completed tasks</h1>}
+        {!isDisabled && selectedItemId === "" && (
+          <TodoForm onSubmit={onSubmit} />
+        )}
+        {!isDisabled && selectedItemId && (
+          <EditForm
+            data={todos.find((todo) => todo.id === selectedItemId)}
+            onCancel={() => setSelectedItemId("")}
+            onUpdate={onUpdate}
+          />
+        )}
         <TodoList
           data={filteredToDos}
           onEdit={onEdit}
