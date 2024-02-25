@@ -1,4 +1,4 @@
-import TodoItem from "../../../types";
+import { TodoItem } from "../../../types";
 import { CheckBox } from "../../Icons/Checkbox";
 import { Delete } from "../../Icons/Delete";
 import { Edit } from "../../Icons/Edit";

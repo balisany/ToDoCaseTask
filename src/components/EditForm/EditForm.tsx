@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import TodoItem from "../../types";
+import { TodoItem } from "../../types";
 
 type Props = {
   data: TodoItem | undefined;

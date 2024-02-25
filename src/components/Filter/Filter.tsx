@@ -1,13 +1,14 @@
-import TodoItem from "../../types";
+import { TodoItem, FilterType } from "../../types";
+import { useSearchParams } from "react-router-dom";
 
 type Props = {
   data: TodoItem[];
-  setFilteredToDos: (todos: TodoItem[]) => void;
 };
 
-type FilterType = "ALL" | "ACTIVE" | "COMPLETED";
+const Filter: React.FC<Props> = ({ data }) => {
+  const [filterParams, setFilterParams] = useSearchParams();
+  console.log(filterParams);
 
-const Filter: React.FC<Props> = ({ data, setFilteredToDos }) => {
   const countFilteredTasks = (type: FilterType): number => {
     const filteredByType =
       type === "ALL"
@@ -20,14 +21,7 @@ const Filter: React.FC<Props> = ({ data, setFilteredToDos }) => {
   };
 
   const onFilter = (type: FilterType) => {
-    const filtered =
-      type === "ALL"
-        ? data
-        : data.filter((todo) =>
-            type === "COMPLETED" ? todo.completed : !todo.completed
-          );
-
-    setFilteredToDos(filtered);
+    setFilterParams({ filter: type });
   };
 
   const CounterLabel = (props: { count: number }) => {
