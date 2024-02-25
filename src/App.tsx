@@ -4,6 +4,7 @@ import TodoItem from "./types";
 import TodoList from "./components/TodoList";
 import TodoForm from "./components/TodoForm";
 import EditForm from "./components/EditForm";
+import Filter from "./components/Filter";
 
 function App() {
   // const initialMockData = ToDoMockData;
@@ -49,9 +50,11 @@ function App() {
       });
     });
     setSelectedItemId("");
+    setIsDisabled(false);
   };
 
   const onToggle = (id: string, status: boolean) => {
+    onCancel();
     setTodos((currentTodo) => {
       return currentTodo.map((todo) => {
         if (todo.id === id) {
@@ -63,6 +66,7 @@ function App() {
   };
 
   const onDelete = (id: string) => {
+    onCancel();
     setTodos((currentValues) => {
       return currentValues.filter((todo) => todo.id !== id);
     });
@@ -70,77 +74,26 @@ function App() {
 
   const onEdit = (id: string) => {
     setSelectedItemId(id);
+    setIsDisabled(true);
   };
 
-  const countFilteredTasks = (type: "ALL" | "ACTIVE" | "COMPLETED"): number => {
-    const filteredByType =
-      type === "ALL"
-        ? todos
-        : todos.filter((todo) =>
-            type === "COMPLETED" ? todo.completed : !todo.completed
-          );
-
-    return filteredByType.length;
-  };
-
-  const onFilter = (type: "ALL" | "ACTIVE" | "COMPLETED") => {
-    const filtered =
-      type === "ALL"
-        ? todos
-        : todos.filter((todo) =>
-            type === "COMPLETED" ? todo.completed : !todo.completed
-          );
-
-    setIsDisabled(type === "COMPLETED");
-    setFilteredToDos(filtered);
-  };
-
-  const CounterLabel = (props: { count: number }) => {
-    return (
-      <span className="inline-flex items-center justify-center w-6 h-6 ms-1 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
-        {Number(props.count)}
-      </span>
-    );
+  const onCancel = () => {
+    setSelectedItemId("");
+    setIsDisabled(false);
   };
 
   return (
     <div className="container">
-      {/* <Header data={todos} /> */}
-      <div className="p-1 m-4  flex text-center content-center items-center gap-6">
-        <button
-          type="button"
-          className="hover:underline"
-          onClick={() => onFilter("ALL")}
-        >
-          All
-          <CounterLabel count={countFilteredTasks("ALL")} />
-        </button>
-        <button
-          type="button"
-          className="hover:underline"
-          onClick={() => onFilter("ACTIVE")}
-        >
-          Active
-          <CounterLabel count={countFilteredTasks("ACTIVE")} />
-        </button>
-        <button
-          type="button"
-          className="hover:underline"
-          onClick={() => onFilter("COMPLETED")}
-        >
-          Completed
-          <CounterLabel count={countFilteredTasks("COMPLETED")} />
-        </button>
-      </div>
+      <Filter data={todos} setFilteredToDos={setFilteredToDos} />
       <div className="bg-white rounded shadow p-6 m-4 sm:w-full md:w-3/4 lg:w-3/4 lg:max-w-lg">
         {isDisabled && <h1 className="">Completed tasks</h1>}
         {!isDisabled && selectedItemId === "" && (
           <TodoForm onSubmit={onSubmit} />
         )}
-        {!isDisabled && selectedItemId && (
+        {selectedItemId && (
           <EditForm
             data={todos.find((todo) => todo.id === selectedItemId)}
-            onCancel={() => setSelectedItemId("")}
+            onCancel={onCancel}
             onUpdate={onUpdate}
           />
         )}
