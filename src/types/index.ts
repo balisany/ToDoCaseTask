@@ -1,3 +1,8 @@
-import { TodoItem } from "./todoItem";
+export type TodoItem = {
+    id: string;
+    title: string;
+    description: string;
+    completed: boolean;
+  }
 
-export default TodoItem;
+export type  FilterType = "ALL" | "ACTIVE" | "COMPLETED";
