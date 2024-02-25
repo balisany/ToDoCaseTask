@@ -47,9 +47,10 @@ const ListItem: React.FC<Props> = ({ data, onEdit, onDelete, onToggle }) => {
 
       <div className={styles.meta}>
         <button
-          className="text-blue-500 border border-blue-500 hover:bg-blue-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-1.5 text-center inline-flex items-center"
+          className="text-blue-500 border border-blue-500 hover:bg-blue-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-1.5 text-center inline-flex items-center disabled:bg-gray-300 disabled:text-gray-500 disabled:border-gray-200"
           type="button"
           title="Edit task"
+          disabled={data.completed}
           onClick={() => onEdit(id)}
         >
           <Edit />
